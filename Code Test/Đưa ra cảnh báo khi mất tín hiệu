@@ -1,0 +1,29 @@
+const int LED_PIN = 13;    // Chọn chân kết nối cho LED
+const unsigned long TIMEOUT = 60000;    // Thời gian chờ tối đa (60 giây)
+unsigned long lastSerialTime = 0;    // Lưu thời gian gửi tin nhắn gần nhất
+unsigned long lastBlinkTime = 0; // Lưu thời gian nhấp nháy gần nhất
+bool ledState = false;    // Lưu trạng thái hiện tại của LED
+bool blinkState = false;  // Lưu trạng thái nhấp nháy của LED
+
+void setup() {
+  pinMode(LED_PIN, OUTPUT);    // Cấu hình chân kết nối LED là đầu ra
+  Serial.begin(9600);    // Khởi động kết nối Serial
+}
+
+void loop() {
+  if (Serial.available()) {    // Nếu có tín hiệu từ cổng Serial
+    lastSerialTime = millis();    // Lưu thời gian gần nhất nhận được tín hiệu
+  }
+  
+  if (millis() - lastSerialTime > TIMEOUT) {    // Nếu thời gian chờ tối đa đã vượt quá
+    if (millis() - lastBlinkTime > 1000) { // Nếu đã đủ thời gian để nhấp nháy LED
+      blinkState = !blinkState;    // Đảo trạng thái của LED nhấp nháy
+      ledState = blinkState && millis() % 200 < 100;    // Xác định trạng thái của LED dựa trên trạng thái nhấp nháy và thời gian hiện tại
+      digitalWrite(LED_PIN, ledState);    // Cập nhật trạng thái của LED
+      lastBlinkTime = millis(); // Lưu thời gian nhấp nháy gần nhất
+    }
+  } else {
+    digitalWrite(LED_PIN, LOW);    // Tắt đèn LED nếu còn nhận được tín hiệu
+    lastBlinkTime = millis(); // Lưu thời gian nhấp nháy gần nhất
+  }
+}
