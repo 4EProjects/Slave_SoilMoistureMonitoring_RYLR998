@@ -255,6 +255,6 @@ void loop()
   ReyaxLoRa_Send(master_Address, String(TemperatureValue) + "|" + String(HumidityValue) + "|" + String(MoistureValue) + "|" + String(BateryPercent));
   delay(500);
   LoRaSleepMode();       // Chuyển sang chế độ Sleep                  
-  LowPower.idle(SLEEP_8S, ADC_OFF, TIMER2_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART0_OFF, TWI_OFF);
+  LowPower.idle(SLEEP_8S, ADC_OFF, TIMER2_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART0_OFF, TWI_OFF); // sleep 8s
   //Serial_Print(); // debug
 }
